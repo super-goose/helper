@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
-import { List } from './app/modules/list/list';
+import List from './app/modules/list';
 
 export default function App() {
   return (

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { SafeAreaView, SectionList, View, Text, SectionListData, Button, TextInput } from "react-native";
+import { SafeAreaView, SectionList, View, Text, SectionListData, Button, TextInput, Pressable } from "react-native";
 import { useSelector } from "react-redux";
 import { useGoodDispatch } from "../../hooks/good-dispatch";
-import { addItem, getList, ListItem } from "./slice";
+import { addItem, getList, ListItem, toggleDone } from "./list-slice";
 
 const ItemAddField = ({ title }: { title: string }) => {
   const [adding, setAdding] = useState(false);
@@ -15,6 +15,7 @@ const ItemAddField = ({ title }: { title: string }) => {
         color: "#ffe",
         width: '60%'
       }}
+      autoFocus={true}
       autoCapitalize='none'
       onSubmitEditing={e => addItemAction({ item: e.nativeEvent.text, store: title })}
       onEndEditing={() => setAdding(false)} />
@@ -23,8 +24,6 @@ const ItemAddField = ({ title }: { title: string }) => {
 };
 
 const SectionHeader = ({ title }: { title: string }) => {
-  console.log('title:', title)
-
   return (
     <View style={{
       flexDirection: "row",
@@ -43,17 +42,28 @@ const SectionHeader = ({ title }: { title: string }) => {
     </View>
   );
 }
-const Item = ({ title }: { title: ListItem }) => {
+const Item = ({ item, store }: { item: ListItem, store: string }) => {
+  const [optionsView, setOptionsView] = useState(false);
+  const toggleDoneAction = useGoodDispatch(toggleDone);
   return (
-    <View style={{
-      padding: 14,
-    }}>
+    <Pressable
+      onLongPress={() => setOptionsView(true)}
+      onPress={() => toggleDoneAction({ id: item.id, store })}
+      style={{
+        padding: 14,
+        borderColor: 'green',
+        borderWidth: 1,
+      }}
+    >
       <Text style={{
+        borderColor: 'green',
+        borderWidth: 1,
         color: '#ffe',
         fontSize: 18,
         paddingLeft: 14,
-      }}>{title.item}</Text>
-    </View>
+        textDecorationLine: item.done ? 'line-through' : 'none'
+      }}>{item.item}</Text>
+    </Pressable>
   );
 }
 export const List = () => {
@@ -68,7 +78,7 @@ export const List = () => {
           borderWidth: 3,
         }}
         sections={list}
-        renderItem={({ item }) => <Item title={item} />}
+        renderItem={({ item, section }) => <Item store={section['title']} item={item} />}
         renderSectionHeader={({ section }: { section: SectionListData<ListItem, string> }) => {
           console.log('section:::', section);
           return <SectionHeader title={section['title']} />

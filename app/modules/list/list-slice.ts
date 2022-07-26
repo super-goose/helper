@@ -4,7 +4,7 @@ import { generate as uuid } from '../../utils/uuid'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../../store'
 import type { UUID } from '../../utils/uuid'
-import type { SectionList, SectionListData } from 'react-native'
+import type { SectionListData } from 'react-native'
 
 // Define a type for the slice state
 export interface ListItem {
@@ -40,38 +40,33 @@ export const counterSlice = createSlice({
   reducers: {
     addItem: (state, { payload }: PayloadAction<ListItemIncoming>) => {
       const { store, item } = payload;
-      state[store] = state[store] || [];
-      state[store].push({ item, id: uuid(), done: false });
+      if (item) {
+        state[store] = state[store] || [];
+        state[store].push({ item, id: uuid(), done: false });
+      }
     },
     // deleteItem: (state, action: PayloadAction<UUID>) => {
     //   state.value = state.value.filter((item: ListItem) => item.id !== action.payload);
     // },
-    // toggleDone: (state, action: PayloadAction<UUID>) => {
-    //   state.value = state.value.map((item: ListItem) => {
-    //     if (item.id !== action.payload) {
-    //       item.done = !item.done;
-    //     }
-    //     return item;
-    //   });
-    // },
+    toggleDone: (state, { payload }: PayloadAction<{ store: string, id: UUID }>) => {
+      const { store, id } = payload;
+      state[store] = state[store].map((item: ListItem) => {
+        if (item.id === id) {
+          item.done = !item.done;
+        }
+        return item;
+      });
+    },
   },
-})
+});
 
 export const {
   addItem,
   // deleteItem,
-  // toggleDone,
+  toggleDone,
 } = counterSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-// export const getList = (state: RootState): SectionListData<ListItem, string>[] => {
-//   return Object.keys(state.list).map((key: string) => {
-//     return <SectionListData<ListItem, string>>{
-//       title: key,
-//       data: state.list[key] as ListItem[],
-//     } as SectionListData<ListItem, string>
-//   }) as SectionListData<ListItem, string>[];
-// }
 
 export const getList = (state: RootState): SectionListData<ListItem, string>[] => {
   const list = [] as SectionListData<ListItem, string>[]
