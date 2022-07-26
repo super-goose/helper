@@ -40,14 +40,15 @@ export const counterSlice = createSlice({
   reducers: {
     addItem: (state, { payload }: PayloadAction<ListItemIncoming>) => {
       const { store, item } = payload;
-      if (item) {
+      if (item.trim()) {
         state[store] = state[store] || [];
-        state[store].push({ item, id: uuid(), done: false });
+        state[store].push({ item: item.trim(), id: uuid(), done: false });
       }
     },
-    // deleteItem: (state, action: PayloadAction<UUID>) => {
-    //   state.value = state.value.filter((item: ListItem) => item.id !== action.payload);
-    // },
+    deleteItem: (state, { payload }: PayloadAction<{ store: string, id: UUID }>) => {
+      const { store, id } = payload;
+      state[store] = state[store].filter((item: ListItem) => (item.id !== id));
+    },
     toggleDone: (state, { payload }: PayloadAction<{ store: string, id: UUID }>) => {
       const { store, id } = payload;
       state[store] = state[store].map((item: ListItem) => {
@@ -62,7 +63,7 @@ export const counterSlice = createSlice({
 
 export const {
   addItem,
-  // deleteItem,
+  deleteItem,
   toggleDone,
 } = counterSlice.actions
 

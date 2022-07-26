@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SafeAreaView, SectionList, View, Text, SectionListData, Button, TextInput, Pressable } from "react-native";
 import { useSelector } from "react-redux";
 import { useGoodDispatch } from "../../hooks/good-dispatch";
-import { addItem, getList, ListItem, toggleDone } from "./list-slice";
+import { addItem, deleteItem, getList, ListItem, toggleDone } from "./list-slice";
 
 const ItemAddField = ({ title }: { title: string }) => {
   const [adding, setAdding] = useState(false);
@@ -45,6 +45,7 @@ const SectionHeader = ({ title }: { title: string }) => {
 const Item = ({ item, store }: { item: ListItem, store: string }) => {
   const [optionsView, setOptionsView] = useState(false);
   const toggleDoneAction = useGoodDispatch(toggleDone);
+  const deleteItemAction = useGoodDispatch(deleteItem);
   return (
     <Pressable
       onLongPress={() => setOptionsView(true)}
@@ -53,6 +54,8 @@ const Item = ({ item, store }: { item: ListItem, store: string }) => {
         padding: 14,
         borderColor: 'green',
         borderWidth: 1,
+        flexDirection: 'row',
+        justifyContent: "space-between"
       }}
     >
       <Text style={{
@@ -63,6 +66,12 @@ const Item = ({ item, store }: { item: ListItem, store: string }) => {
         paddingLeft: 14,
         textDecorationLine: item.done ? 'line-through' : 'none'
       }}>{item.item}</Text>
+      {optionsView &&
+        <>
+          <Button title="delete" onPress={() => deleteItemAction({ id: item.id, store })} />
+          <Button title="nevermind" onPress={() => setOptionsView(false)} />
+        </>
+      }
     </Pressable>
   );
 }
