@@ -38,6 +38,11 @@ export const counterSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
+    addStore: (state, { payload }: PayloadAction<string>) => {
+      if (payload.trim()) {
+        state[payload.trim()] = [];
+      }
+    },
     addItem: (state, { payload }: PayloadAction<ListItemIncoming>) => {
       const { store, item } = payload;
       if (item.trim()) {
@@ -62,6 +67,7 @@ export const counterSlice = createSlice({
 });
 
 export const {
+  addStore,
   addItem,
   deleteItem,
   toggleDone,

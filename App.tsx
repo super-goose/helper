@@ -3,14 +3,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 import List from './app/modules/list';
+import Header from './app/modules/header';
 
 export default function App() {
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        <Text style={styles.text}>Shopping List</Text>
-        {/* <Text style={styles.text}>type a thing below</Text>
-        <TextInput style={styles.textInput} onChange={(e) => console.log(e.nativeEvent.text)} /> */}
+        <Header />
         <List />
         <StatusBar style="light" />
       </View>
@@ -27,14 +26,7 @@ const styles = StyleSheet.create({
     color: '#dda',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 22,
-  },
-  text: {
-    color: '#dda',
-    fontSize: 22,
-    height: 50,
-    borderWidth: 1,
-    borderColor: 'green'
+    paddingTop: 38,
   },
   textInput: {
     color: '#dda',
