@@ -42,6 +42,7 @@ const SectionHeader = ({ title }: { title: string }) => {
     </View>
   );
 }
+
 const Item = ({ item, store }: { item: ListItem, store: string }) => {
   const [optionsView, setOptionsView] = useState(false);
   const toggleDoneAction = useGoodDispatch(toggleDone);
@@ -52,15 +53,15 @@ const Item = ({ item, store }: { item: ListItem, store: string }) => {
       onPress={() => toggleDoneAction({ id: item.id, store })}
       style={{
         padding: 14,
-        borderColor: 'green',
-        borderWidth: 1,
+        // borderColor: 'green',
+        // borderWidth: 1,
         flexDirection: 'row',
         justifyContent: "space-between"
       }}
     >
       <Text style={{
-        borderColor: 'green',
-        borderWidth: 1,
+        // borderColor: 'green',
+        // borderWidth: 1,
         color: '#ffe',
         fontSize: 18,
         paddingLeft: 14,
@@ -83,8 +84,8 @@ export const List = () => {
         style={{
           maxHeight: '90%',
           minWidth: '90%',
-          borderColor: '#f33',
-          borderWidth: 3,
+          // borderColor: '#f33',
+          // borderWidth: 3,
         }}
         sections={list}
         renderItem={({ item, section }) => <Item store={section['title']} item={item} />}
